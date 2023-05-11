@@ -12,38 +12,10 @@ import { setupServiceWorker } from "@builder.io/qwik-city/service-worker";
 setupServiceWorker();
 
 const CACHE_NAME = "cache-test";
-const urlsToCache = [
-  "/",
-  "/index.html",
-  "/styles.css",
-  "/script.js",
-  "/collections/electronics",
-  // Add more assets here
-];
 
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(urlsToCache);
-    })
-  );
-  self.skipWaiting();
-});
+addEventListener("install", () => self.skipWaiting());
 
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
-  self.clients.claim();
-});
+addEventListener("activate", () => self.clients.claim());
 
 self.addEventListener("fetch", (event) => {
   event.respondWith(
