@@ -1,4 +1,4 @@
-import { component$ } from '@builder.io/qwik';
+import { component$ } from "@builder.io/qwik";
 import {
   type DocumentHead,
   routeLoader$,
@@ -6,8 +6,8 @@ import {
   zod$,
   z,
   Form,
-} from '@builder.io/qwik-city';
-import styles from './todolist.module.css';
+} from "@builder.io/qwik-city";
+import styles from "./todolist.module.css";
 
 interface ListItem {
   text: string;
@@ -15,13 +15,17 @@ interface ListItem {
 
 export const list: ListItem[] = [];
 
+console.log("list", list);
+
 export const useListLoader = routeLoader$(() => {
+  console.log("loader", list);
   return list;
 });
 
 export const useAddToListAction = routeAction$(
   (item) => {
     list.push(item);
+    console.log("action", list);
     return {
       success: true,
     };
@@ -34,6 +38,8 @@ export const useAddToListAction = routeAction$(
 export default component$(() => {
   const list = useListLoader();
   const action = useAddToListAction();
+
+  console.log("component", list.value);
 
   return (
     <>
@@ -57,18 +63,20 @@ export default component$(() => {
 
       <div class="container container-center">
         <Form action={action} spaReset>
-          <input type="text" name="text" required class={styles.input} />{' '}
+          <input type="text" name="text" required class={styles.input} />{" "}
           <button type="submit" class="button-dark">
             Add item
           </button>
         </Form>
 
-        <p class={styles.hint}>PS: This little app works even when JavaScript is disabled.</p>
+        <p class={styles.hint}>
+          PS: This little app works even when JavaScript is disabled.
+        </p>
       </div>
     </>
   );
 });
 
 export const head: DocumentHead = {
-  title: 'Qwik Todo List',
+  title: "Qwik Todo List",
 };
